@@ -5,6 +5,14 @@ library(dplyr)
 library(dbplyr)
 library(hrbrthemes)
 
+# Function to generate a plate definition
+GeneratePlateDefinition <- function(PlateID, Date, Description) {
+	# Create a new plate definition
+	Plate <- data.table(PlateID = PlateID, Date = Date, Description = Description)
+
+	return(Plate)
+}
+
 # Function to create a dose matrix for two compounds
 CreateDoseMatrix <- function(CompoundA, MaxDoseA, DirectionA, CompoundB, MaxDoseB, DirectionB) {
 
@@ -118,10 +126,10 @@ DefineWellContents <- function(DoseMatrix, PlateID, StrainID) {
 }
 
 # Function to prepare the growth data
-PrepareGrowthData <- function(filePath, PlateID) {
+PrepareGrowthData <- function(FilePath, PlateID) {
 
 	# Read the data from the file
-	data <- fread(filePath, header = TRUE)
+	data <- fread(FilePath, header = TRUE)
 
 	# Transpose the data and convert it to a data.table
 	data <- as.data.table(t(data))
@@ -182,4 +190,20 @@ UpdateDatabase <- function(Plate, WellContents, Measurements, dbPath = "experime
 	# Disconnect from the database
 	dbDisconnect(con)
 }
+
+# Function to set up an experiment
+SetUpExperiment <- function(PlateID, Date, Description, DoseMatrix, StrainID, FilePath) {
+	# Generate a new plate definition
+	Plate <- GeneratePlateDefinition(PlateID, Date, Description)
+
+	# Define the contents of each well
+	WellContents <- DefineWellContents(DoseMatrix, PlateID, StrainID)
+
+	# Prepare the growth data
+	Measurements <- PrepareGrowthData(FilePath, PlateID)
+
+	# Return a list with all components
+	return(list(Plate = Plate, WellContents = WellContents, Measurements = Measurements))
+}
+
 

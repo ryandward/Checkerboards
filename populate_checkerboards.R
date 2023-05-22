@@ -1,22 +1,34 @@
-
 source("checkerboard_setup.R")
 
-plate <- data.table(PlateID = 0, Date = "2023-05-19", Description = "Imipenem/Mupirocin Checkerboard #0")
-doseMatrix <- CreateDoseMatrix(34, 1000, "leftward", 27, 2, "upward")
-wellContents <- DefineWellContents(doseMatrix, 0, 10081)
-measurements <- PrepareGrowthData("raw_data/20230519.tsv", 0) %>% filter(!is.na(OD600))
-UpdateDatabase(plate, wellContents, measurements)
+# Setup experiment 0
+experiment0 <- SetUpExperiment(
+	PlateID = 0,
+	Date = "2023-05-19",
+	Description = "Imipenem/Mupirocin Checkerboard #0",
+	DoseMatrix = CreateDoseMatrix(34, 1000, "leftward", 27, 2, "upward"),
+	StrainID = 10081,
+	FilePath = "raw_data/20230519.tsv"
+)
+UpdateDatabase(experiment0$Plate, experiment0$WellContents, experiment0$Measurements)
 
-plate <- data.table(PlateID = 1, Date = "2023-05-20", Description = "Imipenem/Mupirocin Checkerboard #1") %>% data.table
-doseMatrix <- CreateDoseMatrix(27, 1, "leftward", 34, 1000, "upward") %>% data.table
-wellContents <- DefineWellContents(doseMatrix, 1, 10081) %>% data.table
-measurements <- PrepareGrowthData("raw_data/20230520.tsv", 1)
-UpdateDatabase(plate, wellContents, measurements)
+# Setup experiment 1
+experiment1 <- SetUpExperiment(
+	PlateID = 1,
+	Date = "2023-05-20",
+	Description = "Imipenem/Mupirocin Checkerboard #1",
+	DoseMatrix = CreateDoseMatrix(27, 1, "leftward", 34, 1000, "upward"),
+	StrainID = 10081,
+	FilePath = "raw_data/20230520.tsv"
+)
+UpdateDatabase(experiment1$Plate, experiment1$WellContents, experiment1$Measurements)
 
-plate <- data.table(PlateID = 2, Date = "2023-05-21", Description = "Imipenem/Mupirocin Checkerboard #2")
-doseMatrix <- CreateDoseMatrix(27, 1, "leftward", 34, 1000, "upward")
-wellContents <- DefineWellContents(doseMatrix, 2, 10081)
-measurements <- PrepareGrowthData("raw_data/20230521.tsv", 2)
-UpdateDatabase(plate, wellContents, measurements)
-
-
+# Setup experiment 2
+experiment2 <- SetUpExperiment(
+	PlateID = 2,
+	Date = "2023-05-21",
+	Description = "Imipenem/Mupirocin Checkerboard #2",
+	DoseMatrix = CreateDoseMatrix(27, 1, "leftward", 34, 1000, "upward"),
+	StrainID = 10081,
+	FilePath = "raw_data/20230521.tsv"
+)
+UpdateDatabase(experiment2$Plate, experiment2$WellContents, experiment2$Measurements)
