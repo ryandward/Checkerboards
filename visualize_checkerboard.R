@@ -32,7 +32,7 @@ doc_theme <- theme_ipsum(
 	axis_col = "black")
 
 WellContents %>%
-	filter(CompoundID == 34 & Dose == 1000) %>%
+	filter(CompoundID == 34 & Dose == 1000 & PlateID %in% c(1, 2)) %>%
 	select(WellName, PlateID) %>%
 	inner_join(WellContents %>% filter(CompoundID == 27)) %>%
 	inner_join(Measurements) %>%
